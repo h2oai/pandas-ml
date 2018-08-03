@@ -216,13 +216,14 @@ def _wrap_data_plot(func, func_name):
         """ % func_name)
     return f
 
+import os
+if os.getenv('ENABLE_PLOTTING') is not None:
+    _xy_plots = ['jointplot', 'lmplot', 'regplot', 'residplot']
+    _attach_methods(SeabornMethods, _wrap_xy_plot, _xy_plots)
 
-_xy_plots = ['jointplot', 'lmplot', 'regplot', 'residplot']
-_attach_methods(SeabornMethods, _wrap_xy_plot, _xy_plots)
-
-_categorical_plots = ['factorplot', 'boxplot', 'violinplot', 'stripplot',
-                      'pointplot', 'barplot']
-_attach_methods(SeabornMethods, _wrap_categorical_plot, _categorical_plots)
-
-_data_plots = ['pairplot']
-_attach_methods(SeabornMethods, _wrap_data_plot, _data_plots)
+    _categorical_plots = ['factorplot', 'boxplot', 'violinplot', 'stripplot',
+                          'pointplot', 'barplot']
+    _attach_methods(SeabornMethods, _wrap_categorical_plot, _categorical_plots)
+    
+    _data_plots = ['pairplot']
+    _attach_methods(SeabornMethods, _wrap_data_plot, _data_plots)
