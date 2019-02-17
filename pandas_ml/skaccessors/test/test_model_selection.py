@@ -94,7 +94,7 @@ class TestSplitter(tm.TestCase):
             tm.assert_index_equal(df.columns, train_df.columns)
             tm.assert_index_equal(df.columns, test_df.columns)
 
-            self.assertTrue(df.shape[0], train_df.shape[0] + test_df.shape[1])
+            self.assertEqual(len(df), len(train_df) + len(test_df))
 
     def test_split(self):
         df = pdml.ModelFrame(datasets.load_iris())
@@ -108,7 +108,7 @@ class TestSplitter(tm.TestCase):
             tm.assert_index_equal(df.columns, train_df.columns)
             tm.assert_index_equal(df.columns, test_df.columns)
 
-            self.assertTrue(df.shape[0], train_df.shape[0] + test_df.shape[1])
+            self.assertEqual(len(df), len(train_df) + len(test_df))
 
     def test_split_keep_index(self):
         df = pdml.ModelFrame({'A': [1, 2, 3, 4, 5, 6, 7, 8],
@@ -148,9 +148,9 @@ class TestSplitter(tm.TestCase):
         tm.assert_index_equal(df.columns, train_df.columns)
         tm.assert_index_equal(df.columns, test_df.columns)
 
-        self.assertTrue(df.shape[0], train_df.shape[0] + test_df.shape[1])
-        self.assertTrue(df.shape[1], train_df.shape[1])
-        self.assertTrue(df.shape[1], test_df.shape[1])
+        self.assertEqual(len(df), len(train_df) + len(test_df))
+        self.assertEqual(df.shape[1], train_df.shape[1])
+        self.assertEqual(df.shape[1], test_df.shape[1])
 
         tm.assert_index_equal(df.columns, train_df.columns)
         tm.assert_index_equal(df.columns, test_df.columns)
@@ -173,9 +173,9 @@ class TestSplitter(tm.TestCase):
         tm.assert_index_equal(df.columns, train_df.columns)
         tm.assert_index_equal(df.columns, test_df.columns)
 
-        self.assertTrue(df.shape[0], train_df.shape[0] + test_df.shape[1])
-        self.assertTrue(df.shape[1], train_df.shape[1])
-        self.assertTrue(df.shape[1], test_df.shape[1])
+        self.assertEqual(len(df), len(train_df) + len(test_df))
+        self.assertEqual(df.shape[1], train_df.shape[1])
+        self.assertEqual(df.shape[1], test_df.shape[1])
 
         tm.assert_index_equal(df.columns, train_df.columns)
         tm.assert_index_equal(df.columns, test_df.columns)
@@ -277,7 +277,7 @@ class TestSplitter(tm.TestCase):
             tm.assert_index_equal(df.columns, train_df.columns)
             tm.assert_index_equal(df.columns, test_df.columns)
 
-            self.assertTrue(df.shape[0], train_df.shape[0] + test_df.shape[1])
+            self.assertEqual(len(df), len(train_df) + len(test_df))
 
     def test_nested_cross_validation(self):
         # http://scikit-learn.org/stable/auto_examples/model_selection/plot_nested_cross_validation_iris.html#sphx-glr-auto-examples-model-selection-plot-nested-cross-validation-iris-py
@@ -338,15 +338,7 @@ class TestHyperParameterOptimizer(tm.TestCase):
             df.fit(cv)
 
         result = df.model_selection.describe(cv)
-        expected = pd.DataFrame({'mean': [0.97161937, 0.9476906, 0.97273233, 0.95937674, 0.97273233,
-                                          0.96271564, 0.94936004, 0.94936004, 0.94936004],
-                                 'std': [0.01546977, 0.0221161, 0.01406514, 0.02295168, 0.01406514,
-                                         0.01779749, 0.01911084, 0.01911084, 0.01911084],
-                                 'C': [1, 1, 10, 10, 100, 100, 1, 10, 100],
-                                 'gamma': [0.001, 0.0001, 0.001, 0.0001, 0.001, 0.0001,
-                                           np.nan, np.nan, np.nan],
-                                 'kernel': ['rbf'] * 6 + ['linear'] * 3},
-                                columns=['mean', 'std', 'C', 'gamma', 'kernel'])
+        expected = pd.DataFrame(cv.cv_results_)
         self.assertIsInstance(result, pdml.ModelFrame)
         tm.assert_frame_equal(result, expected)
 

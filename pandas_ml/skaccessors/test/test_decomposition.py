@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import pytest
 
 import sklearn.datasets as datasets
 import sklearn.decomposition as decomposition
@@ -14,10 +15,6 @@ class TestDecomposition(tm.TestCase):
         self.assertIs(df.decomposition.PCA, decomposition.PCA)
         self.assertIs(df.decomposition.IncrementalPCA,
                       decomposition.IncrementalPCA)
-
-        self.assertIs(df.decomposition.RandomizedPCA,
-                      decomposition.RandomizedPCA)
-
         self.assertIs(df.decomposition.KernelPCA, decomposition.KernelPCA)
         self.assertIs(df.decomposition.FactorAnalysis,
                       decomposition.FactorAnalysis)
@@ -198,35 +195,28 @@ class TestDecomposition(tm.TestCase):
         self.assert_numpy_array_almost_equal(result.data.values[:, :40],
                                              expected[:, :40])
 
-    def test_inverse_transform(self):
+    @pytest.mark.parametrize("algo", ['PCA'])
+    def test_inverse_transform(self, algo):
         iris = datasets.load_iris()
         df = pdml.ModelFrame(iris)
 
-        models = ['PCA']
-        for model in models:
-            mod1 = getattr(df.decomposition, model)()
-            mod2 = getattr(decomposition, model)()
+        mod1 = getattr(df.decomposition, algo)()
+        mod2 = getattr(decomposition, algo)()
 
-            df.fit(mod1)
-            mod2.fit(iris.data, iris.target)
+        df.fit(mod1)
+        mod2.fit(iris.data, iris.target)
 
-            result = df.transform(mod1)
-            expected = mod2.transform(iris.data)
+        result = df.transform(mod1)
+        expected = mod2.transform(iris.data)
 
-            self.assertIsInstance(result, pdml.ModelFrame)
-            tm.assert_series_equal(df.target, result.target)
-            self.assert_numpy_array_almost_equal(result.data.values, expected)
+        self.assertIsInstance(result, pdml.ModelFrame)
+        tm.assert_series_equal(df.target, result.target)
+        self.assert_numpy_array_almost_equal(result.data.values, expected)
 
-            result = df.inverse_transform(mod1)
-            expected = mod2.inverse_transform(iris.data)
+        result = df.inverse_transform(mod1)
+        expected = mod2.inverse_transform(iris.data)
 
-            self.assertIsInstance(result, pdml.ModelFrame)
-            tm.assert_series_equal(df.target, result.target)
-            self.assert_numpy_array_almost_equal(result.data.values, expected)
-            tm.assert_index_equal(result.columns, df.columns)
-
-
-if __name__ == '__main__':
-    import nose
-    nose.runmodule(argv=[__file__, '-vvs', '-x', '--pdb', '--pdb-failure'],
-                   exit=False)
+        self.assertIsInstance(result, pdml.ModelFrame)
+        tm.assert_series_equal(df.target, result.target)
+        self.assert_numpy_array_almost_equal(result.data.values, expected)
+        tm.assert_index_equal(result.columns, df.columns)

@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import pytest
 
 import numpy as np
 import sklearn.datasets as datasets
@@ -42,7 +43,7 @@ class TestBaseRegressor(tm.TestCase):
     def test_precict(self):
         diabetes = datasets.load_diabetes()
         estimator = base.StatsModelsRegressor(sm.OLS)
-        with self.assertRaisesRegexp(ValueError, 'StatsModelsRegressor is not fitted to data'):
+        with pytest.raises(ValueError, match='StatsModelsRegressor is not fitted to data'):
             estimator.predict(diabetes.data)
 
     def test_Regressions(self):
@@ -119,16 +120,10 @@ class TestBaseRegressor(tm.TestCase):
             self.assert_numpy_array_almost_equal(result, expected)
 
     def test_gridsearch(self):
-        import sklearn.grid_search as gs
+        import sklearn.model_selection as ms
         tuned_parameters = {'statsmodel': [sm.OLS, sm.GLS]}
         diabetes = datasets.load_diabetes()
 
-        cv = gs.GridSearchCV(base.StatsModelsRegressor(sm.OLS), tuned_parameters, cv=5, scoring=None)
+        cv = ms.GridSearchCV(base.StatsModelsRegressor(sm.OLS), tuned_parameters, cv=5, scoring=None)
         fitted = cv.fit(diabetes.data, diabetes.target)
         self.assertTrue(fitted.best_estimator_.statsmodel is sm.OLS)
-
-
-if __name__ == '__main__':
-    import nose
-    nose.runmodule(argv=[__file__, '-vvs', '-x', '--pdb', '--pdb-failure'],
-                   exit=False)
