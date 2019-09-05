@@ -20,7 +20,6 @@ conda install patsy statsmodels seaborn
 
 python -m pip install graphviz
 python -m pip install xgboost
-python -m pip install enum34
 python -m pip install pytest pytest-cov codecov
 python -m pip install flake8
 
