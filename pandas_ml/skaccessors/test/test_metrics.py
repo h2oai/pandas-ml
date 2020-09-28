@@ -136,13 +136,13 @@ class TestClassificationMetrics(tm.TestCase):
         expected = metrics.hinge_loss(self.target, self.decision)
         self.assertEqual(result, expected)
 
-    def test_jaccard_similarity_score(self):
-        result = self.df.metrics.jaccard_similarity_score()
-        expected = metrics.jaccard_similarity_score(self.target, self.pred)
+    def test_jaccard_score(self):
+        result = self.df.metrics.jaccard_score()
+        expected = metrics.jaccard_score(self.target, self.pred)
         self.assertEqual(result, expected)
 
-        result = self.df.metrics.jaccard_similarity_score(normalize=False)
-        expected = metrics.jaccard_similarity_score(self.target, self.pred, normalize=False)
+        result = self.df.metrics.jaccard_score(normalize=False)
+        expected = metrics.jaccard_score(self.target, self.pred, normalize=False)
         self.assertEqual(result, expected)
 
     def test_log_loss(self):
