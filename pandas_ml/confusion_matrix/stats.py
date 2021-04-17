@@ -57,7 +57,8 @@ def class_agreement(df):
     nis2 = ni[ni > 1].map(lambda x: choose(int(x), 2)).sum()
     njs2 = nj[nj > 1].map(lambda x: choose(int(x), 2)).sum()
 
-    num = df[df > 1].dropna(axis=[0, 1], thresh=1).applymap(lambda n: choose(n, 2)).sum().sum() - np.float64(nis2 * njs2) / n2
+    df2 = df[df > 1].dropna(axis=0, thresh=1)
+    num = df2[df2 > 1].dropna(axis=1, thresh=1).applymap(lambda n: choose(n, 2)).sum().sum() - np.float64(nis2 * njs2) / n2
     den = (np.float64(nis2 + njs2) / 2 - np.float64(nis2 * njs2) / n2)
     crand = num / den
 
