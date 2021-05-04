@@ -63,7 +63,7 @@ class ConfusionMatrixAbstract(object):
             df = df.reindex([False, True], axis=1)
             df = df.fillna(0)
         else:
-            df.add(pd.DataFrame(index=idx.values, columns=idx.values).fillna(0)).fillna(0).astype(int)  # if some columns or rows are missing
+            df = df.add(pd.DataFrame(index=idx.values, columns=idx.values).fillna(0)).fillna(0).astype(int)  # if some columns or rows are missing
 
         self._df_confusion = df
         self._df_confusion.index.name = self.true_name
