@@ -269,7 +269,7 @@ class ConfusionMatrixAbstract(object):
     def binarize(self, select):
         """Returns a binary confusion matrix from
         a confusion matrix"""
-        if not isinstance(select, collections.Iterable):
+        if not isinstance(select, collections.abc.Iterable):
             select = np.array(select)
 
         y_true_bin = self.y_true().map(lambda x: x in select)
@@ -285,7 +285,7 @@ class ConfusionMatrixAbstract(object):
         Enlarges confusion matrix with new classes
         It should add empty rows and columns
         """
-        if not isinstance(select, collections.Iterable):
+        if not isinstance(select, collections.abc.Iterable):
             idx_new_cls = pd.Index([select])
         else:
             idx_new_cls = pd.Index(select)

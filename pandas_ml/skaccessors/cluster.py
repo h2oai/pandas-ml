@@ -74,12 +74,12 @@ class ClusterMethods(_AccessorMethods):
 
     @property
     def bicluster(self):
-        """Property to access ``sklearn.cluster.bicluster``"""
+        """Property to access ``sklearn.cluster._bicluster``"""
         return self._bicluster
 
     @cache_readonly
     def _bicluster(self):
-        return _AccessorMethods(self._df, module_name='sklearn.cluster.bicluster')
+        return _AccessorMethods(self._df, module_name='sklearn.cluster._bicluster')
 
 
 _cluster_methods = ['estimate_bandwidth', 'ward_tree']

@@ -8,6 +8,9 @@ from pandas.util._decorators import Appender
 import pandas_ml.misc as misc
 
 
+setattr(compat, "string_types", (str,))
+
+
 _shared_docs = dict()
 
 _shared_docs['skaccessor'] = """

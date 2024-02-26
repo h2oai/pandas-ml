@@ -19,6 +19,9 @@ import pandas_ml.xgboost as xgboost
 import pandas_ml.util as util
 
 
+setattr(compat, "string_types", (str,))
+
+
 class ModelFrame(ModelPredictor, pd.DataFrame):
     """
     Data structure subclassing ``pandas.DataFrame`` to define a metadata to
