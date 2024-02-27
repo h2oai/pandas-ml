@@ -25,10 +25,10 @@ class TestCluster(tm.TestCase):
         self.assertIs(df.cluster.MeanShift, cluster.MeanShift)
         self.assertIs(df.cluster.SpectralClustering, cluster.SpectralClustering)
 
-        self.assertIs(df.cluster.bicluster.SpectralBiclustering,
-                      cluster.bicluster.SpectralBiclustering)
-        self.assertIs(df.cluster.bicluster.SpectralCoclustering,
-                      cluster.bicluster.SpectralCoclustering)
+        self.assertIs(df.cluster.SpectralBiclustering,
+                      cluster.SpectralBiclustering)
+        self.assertIs(df.cluster.SpectralCoclustering,
+                      cluster.SpectralCoclustering)
 
     def test_estimate_bandwidth(self):
         iris = datasets.load_iris()
@@ -244,8 +244,8 @@ class TestCluster(tm.TestCase):
             shuffle=True, random_state=self.random_state)
         df = pdml.ModelFrame(data)
 
-        mod1 = getattr(df.cluster.bicluster, algo)(3, random_state=self.random_state)
-        mod2 = getattr(cluster.bicluster, algo)(3, random_state=self.random_state)
+        mod1 = getattr(df.cluster, algo)(3, random_state=self.random_state)
+        mod2 = getattr(cluster, algo)(3, random_state=self.random_state)
 
         df.fit(mod1)
         mod2.fit(data)
